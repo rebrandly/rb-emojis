@@ -35,6 +35,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '12'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Restore node_modules
         id: cache-node-modules
@@ -44,8 +45,6 @@ jobs:
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Publish
-        run: |
-          npm set registry "https://registry.npmjs.org"
-          npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
-          npm login
-          npm publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
